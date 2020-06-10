@@ -13,7 +13,7 @@ import com.demo.model.ServerDetail;
 import com.demo.service.KafkaProducer;
 import com.github.javafaker.Faker;
 /**
- * Controller class.
+ * Controller class, For various rest operation.
  * @author vinayak
  *
  */
@@ -32,24 +32,24 @@ public class ApacheKafkaWebController {
 	KafkaProducer kafkaProducer;
 
     /**
-     * Added this method for debugging only.Remove this later
+     * Get Status of specific Server.
+     * @return 
      */
-	@GetMapping(value = "/serverDetails")
-	public void getserverDetails() {
-		ServerDetail serverDetail = new ServerDetail();
-		serverDetail.setId("2");
-		serverDetail.setServerName("Pune");
-		List<ServerDetail> serverDetailList = ServerDetailsRepository.findAll();
-		logger.info(serverDetailList.get(0).getServerName());
+	@GetMapping(value = "/serverDetailsFromDb")
+	public ServerDetail getserverDetails(@RequestParam String id) {
+		ServerDetail serverDetail = ServerDetailsRepository.findOne(id);
+		logger.info(serverDetail.toString());
+		return serverDetail;
 	}
 	
 	/**
-     * Added this method for debugging only.Remove this later
+     * Load fake bulk data at MongoDB.Extected time to load data 5 minutes.
+	 * @return 
      */
-	@GetMapping(value = "/LoadTestServerDetails")
-	public void LoadTestServerDetails() {
+	@GetMapping(value = "/loadBulkTestData")
+	public String loadBulkTestData() {
 		ServerDetail serverDetail = new ServerDetail();
-		for(int i=70000; i<100000;i++) {
+		for(int i=1; i<10;i++) {
 			
 			try {
 				//Fake data
@@ -66,14 +66,19 @@ public class ApacheKafkaWebController {
 		}
 		List<ServerDetail> serverDetailList = ServerDetailsRepository.findAll();
 		logger.info(serverDetailList.get(0).getServerName());
+		return "Execution completed !";
 	}
 	
-	@GetMapping(value = "/publish")
-	public void sendMessageToKafkaTopic(){
+	/**
+	 * Publish bulk messages to kafka.
+	 * @return 
+	 */
+	@GetMapping(value = "/sendMessageToKafkaTopic")
+	public String sendMessageToKafkaTopic(@RequestParam int noOfMessages){
 		String message="";
 		ServerDetail serverDetail = new ServerDetail();
 		
-		for (int i = 70000; i < 100000; i++) {
+		for (int i = 1; i <= noOfMessages; i++) {
 			try {
 				serverDetail.setId(String.valueOf(ServerDetailsHelper.getRandomDoubleBetweenRange(1, 70000)));
 				serverDetail.setServerStatus(ServerDetailsHelper.getRandomDoubleBetweenRange(1, 2)%2==0?"Active":"inactive");
@@ -86,7 +91,41 @@ public class ApacheKafkaWebController {
 
 		}
 		
-		
+		return noOfMessages +" Messages published !";
+	}
+	
+	/**
+	 * Publish specific messages to kafka.
+	 * @return 
+	 */
+	@GetMapping(value = "/publishStatusForGivenId")
+	public String publishStatusForGivenId(@RequestParam int id,@RequestParam String status){
+		String message="";
+		ServerDetail serverDetail = new ServerDetail();
+			try {
+				serverDetail.setId(String.valueOf(id));
+				serverDetail.setServerStatus(status);
+				message=serverDetailsHelper.getJsonString(serverDetail);
+				kafkaProducer.sendMessage(message);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				// break;
+			}
+		return message +" published !";
+	}
+	
+	/**
+	 * Get Server details form cache.
+	 * @return 
+	 */
+	@GetMapping(value = "/getServerDetailsfromCache")
+	public ServerDetail getServerDetailsfromCache(@RequestParam String id){
+		ServerDetail serverDetailDb = ServerDetailsRepository.findOne(id);
+		ServerDetail serverDetailCache = serverDetailsHelper.getCachedObject(id);
+		logger.info("Cached object: "+serverDetailCache);
+		logger.info("DB object: "+serverDetailDb);
+
+		return serverDetailCache;
 	}
 
 }

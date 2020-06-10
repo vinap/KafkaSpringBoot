@@ -37,6 +37,10 @@ public class ServerDetailsHelper {
 		return ServerDetailsRepository.findOne(serverDetail.getId());
 	}
 
+	/**
+	 * put object into cache.
+	 * @param serverDetail
+	 */
 	public void cacheObject(ServerDetail serverDetail) {
 		Cache cache = cacheManager.getCache("serverDetailCache");
 		cache.put(serverDetail.getId(), serverDetail);
@@ -76,5 +80,14 @@ public class ServerDetailsHelper {
 			logger.info(e.getMessage());
 		}
 		return jsonStr;
+	}
+	/**
+	 * get object into cache.
+	 * @param serverDetail
+	 * @return 
+	 */
+	public ServerDetail getCachedObject(String id) {
+		Cache cache = cacheManager.getCache("serverDetailCache");
+		return cache.get(id, ServerDetail.class);
 	}
 }
