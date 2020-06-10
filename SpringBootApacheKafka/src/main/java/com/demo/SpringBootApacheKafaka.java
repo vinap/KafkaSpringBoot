@@ -7,13 +7,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@ComponentScan({ "com.demo.controller", "com.demo.service" ,"com.demo.configuration"})
+@ComponentScan({ "com.demo.controller", "com.demo.service", "com.demo.configuration" })
 @EntityScan("com.demo.model")
 @EnableMongoRepositories("com.demo.repository")
-public class SpringBootHelloWorldApplication {
+public class SpringBootApacheKafaka {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(new Object[] { SpringBootHelloWorldApplication.class }, args);
+		SpringApplication.run(new Object[] { SpringBootApacheKafaka.class }, args);
 	}
 }
