@@ -1,1 +1,1 @@
-# POC for Kafka, Spring boot, EHCache and MongoDB connection.
+# POC for Kafka, Spring boot, EHCache and MongoDB.
