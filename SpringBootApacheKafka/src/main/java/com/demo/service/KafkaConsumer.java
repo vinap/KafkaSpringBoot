@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import com.demo.model.ServerDetail;
-import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Kafka consumer class.
  * @author vinayak
@@ -24,26 +23,19 @@ public class KafkaConsumer {
 	 */
 	@KafkaListener(topics = "ServerStatus")
 	public void consume(String message) {
-		ServerDetail serverDetail = parseString(message);
-		serverDetail = serverDetailsHelper.getDetailsFromDB(serverDetail);
-		logger.info(String.format("$$ -> Consumed Message -> %s", serverDetail));
-	}
-
-	/**
-	 * Return parsed object for given string.
-	 * @param message
-	 * @return
-	 */
-	public ServerDetail parseString(String message) {
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		ServerDetail serverDetail = null;
-		try {
-			serverDetail = objectMapper.readValue(message, ServerDetail.class);
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			logger.info(String.format("invalid messgae :", message));
+		ServerDetail serverDetailKafka = serverDetailsHelper.parseString(message);
+		ServerDetail serverDetailDB = serverDetailsHelper.getDetailsFromDB(serverDetailKafka);
+		if(serverDetailDB!=null) {
+			serverDetailDB.setServerStatus(serverDetailKafka.getServerStatus());
+			logger.info(String.format("$$ -> Consumed Message -> %s", serverDetailDB));
+			serverDetailsHelper.cacheObject(serverDetailDB);
+		}else {
+			logger.info(String.format("Not Found Server details at DB for Server ID:%s", serverDetailKafka.getId()));
 		}
-		return serverDetail;
+		
 	}
+
+	
+	
+	
 }
