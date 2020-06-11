@@ -9,7 +9,7 @@ import com.demo.model.ServerDetail;
  * @author vinayak
  *
  */
-@Repository
+//@Repository
 public interface  ServerDetailsRepository extends  MongoRepository<ServerDetail, String>{
 
 }

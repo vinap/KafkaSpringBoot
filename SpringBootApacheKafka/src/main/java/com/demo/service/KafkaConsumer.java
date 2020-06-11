@@ -26,7 +26,7 @@ public class KafkaConsumer {
 		ServerDetail serverDetailKafka = serverDetailsHelper.parseString(message);
 		ServerDetail serverDetailDB = serverDetailsHelper.getDetailsFromDB(serverDetailKafka);
 		if(serverDetailDB!=null) {
-			serverDetailDB.setServerStatus(serverDetailKafka.getServerStatus());
+			serverDetailDB.setStatus(serverDetailKafka.getStatus());
 			logger.info(String.format("$$ -> Consumed Message -> %s", serverDetailDB));
 			serverDetailsHelper.cacheObject(serverDetailDB);
 		}else {

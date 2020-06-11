@@ -1,6 +1,9 @@
 package com.demo.controller;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.demo.model.ServerDetail;
 import com.demo.service.KafkaProducer;
-import com.github.javafaker.Faker;
 /**
  * Controller class, For various rest operation.
  * @author vinayak
@@ -48,25 +50,15 @@ public class ApacheKafkaWebController {
      */
 	@GetMapping(value = "/loadBulkTestData")
 	public String loadBulkTestData() {
-		ServerDetail serverDetail = new ServerDetail();
-		for(int i=1; i<10;i++) {
-			
-			try {
-				//Fake data
-				Faker faker = new Faker();
-				String streetAddress = faker.address().streetAddress();
-				serverDetail.setId(String.valueOf(i));
-				serverDetail.setServerName(streetAddress);
-				ServerDetailsRepository.insert(serverDetail);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				//break;
-			}
-			
-		}
-		List<ServerDetail> serverDetailList = ServerDetailsRepository.findAll();
-		logger.info(serverDetailList.get(0).getServerName());
-		return "Execution completed !";
+		CompletableFuture<String> result=serverDetailsHelper.loadFakeData();
+		String msg="Somthing went wrong !";
+		try {
+			msg =result.get();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			msg="Somthing went wrong !";
+		} 
+		return msg;
 	}
 	
 	/**
@@ -81,7 +73,7 @@ public class ApacheKafkaWebController {
 		for (int i = 1; i <= noOfMessages; i++) {
 			try {
 				serverDetail.setId(String.valueOf(ServerDetailsHelper.getRandomDoubleBetweenRange(1, 70000)));
-				serverDetail.setServerStatus(ServerDetailsHelper.getRandomDoubleBetweenRange(1, 2)%2==0?"Active":"inactive");
+				serverDetail.setStatus(ServerDetailsHelper.getRandomDoubleBetweenRange(1, 2)%2==0?"Active":"inactive");
 				message=serverDetailsHelper.getJsonString(serverDetail);
 				kafkaProducer.sendMessage(message);
 			} catch (Exception e) {
@@ -104,7 +96,7 @@ public class ApacheKafkaWebController {
 		ServerDetail serverDetail = new ServerDetail();
 			try {
 				serverDetail.setId(String.valueOf(id));
-				serverDetail.setServerStatus(status);
+				serverDetail.setStatus(status);
 				message=serverDetailsHelper.getJsonString(serverDetail);
 				kafkaProducer.sendMessage(message);
 			} catch (Exception e) {

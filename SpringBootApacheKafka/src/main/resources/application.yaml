@@ -15,8 +15,9 @@ spring:
   data:
     mongodb:
       database: Server
-      port: 27017
-      host: 127.0.0.1
+      #port: 27017
+      #host: 127.0.0.1
+      uri: mongodb://localhost:27017/Server?maxPoolSize=10
   cache:
     jcache:
       config: classpath:ehcache.xml
