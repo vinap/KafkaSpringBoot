@@ -72,7 +72,8 @@ public class ApacheKafkaWebController {
 		
 		for (int i = 1; i <= noOfMessages; i++) {
 			try {
-				serverDetail.setId(String.valueOf(ServerDetailsHelper.getRandomDoubleBetweenRange(1, 70000)));
+				//serverDetail.setId(String.valueOf(ServerDetailsHelper.getRandomDoubleBetweenRange(1, 70000)));
+				serverDetail.setId(String.valueOf(noOfMessages));
 				serverDetail.setStatus(ServerDetailsHelper.getRandomDoubleBetweenRange(1, 2)%2==0?"Active":"inactive");
 				message=serverDetailsHelper.getJsonString(serverDetail);
 				kafkaProducer.sendMessage(message);

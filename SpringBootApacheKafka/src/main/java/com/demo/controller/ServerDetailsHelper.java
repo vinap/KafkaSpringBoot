@@ -8,13 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
 import com.demo.model.ServerDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
@@ -58,6 +54,13 @@ public class ServerDetailsHelper {
 		cache.put(serverDetail.getId(), serverDetail);
 	}
 	
+	/**
+	 * update db object
+	 * @param serverDetail
+	 */
+	public void updateDbObject(ServerDetail serverDetail) {
+		  ServerDetailsRepository.save(serverDetail);
+	}
 	/**
 	 * Return parsed object for given string.
 	 * @param message
@@ -151,7 +154,8 @@ public class ServerDetailsHelper {
 		        		 obj.get("name").toString(), 
 		        		 "", 
 		        		 obj.get("hostname").toString(), 
-		        		 obj.get("type").toString());
+		        		 obj.get("type").toString(),
+		        		 "");
 		        Cache cache = cacheManager.getCache("serverDetailCache");
 		 		cache.put(serverDetail.getId(), serverDetail);
 		 		logger.info(serverDetail.getId()+serverDetail.getName());

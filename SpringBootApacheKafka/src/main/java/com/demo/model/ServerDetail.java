@@ -22,19 +22,24 @@ public class ServerDetail implements Serializable {
 	private String status;
 	private String hostname;
 	private String type;
+	private String lastUpdateTimestamp;
 	
 	
 	public ServerDetail() {
 		super();
 	}
-	public ServerDetail(String id, String name, String status, String hostname, String type) {
+ 
+	public ServerDetail(String id, String name, String status, String hostname, String type,
+			String lastUpdateTimestamp) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.status = status;
 		this.hostname = hostname;
 		this.type = type;
+		this.lastUpdateTimestamp = lastUpdateTimestamp;
 	}
+
 	public String getId() {
 		return id;
 	}
@@ -65,11 +70,21 @@ public class ServerDetail implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public String getLastUpdateTimestamp() {
+		return lastUpdateTimestamp;
+	}
+
+	public void setLastUpdateTimestamp(String lastUpdateTimestamp) {
+		this.lastUpdateTimestamp = lastUpdateTimestamp;
+	}
+
 	@Override
 	public String toString() {
 		return "ServerDetail [id=" + id + ", name=" + name + ", status=" + status + ", hostname=" + hostname + ", type="
-				+ type + "]";
+				+ type + ", lastUpdateTimestamp=" + lastUpdateTimestamp + "]";
 	}
+	 
 	
 	
 
