@@ -110,10 +110,10 @@ public class ServerDetailsHelper {
 	 * Load fake data in DB.
 	 * @return
 	 */
-	public CompletableFuture<String> loadFakeData() {
+	public CompletableFuture<String> loadFakeData(int noOfMessages) {
 		ServerDetail serverDetail = new ServerDetail();
 		String msg="Execution completed !";
-		for(int i=1; i<70000;i++) {
+		for(int i=1; i<noOfMessages;i++) {
 			
 			try {
 				//Fake data
@@ -133,7 +133,6 @@ public class ServerDetailsHelper {
 		List<ServerDetail> serverDetailList = ServerDetailsRepository.findAll();
 		logger.info(serverDetailList.get(0).getName());
 		logger.info("Thread.currentThread().getName() "+Thread.currentThread().getName()+"  Thread.currentThread().getId()"+Thread.currentThread().getId());
-		
 		return CompletableFuture.completedFuture(msg);
 	}
 	
@@ -143,8 +142,9 @@ public class ServerDetailsHelper {
 	 * @param serverDetail
 	 * @return
 	 */
-	public void getDetailsFromDBWithPagination() {
-		   
+	public void getDetailsFromDB() {
+			 Cache cache = cacheManager.getCache("serverDetailCache");
+			 cache.clear();
 			 DBCollection collection = mongoTemplate.getCollection("serverDetail");
 		     DBCursor cursor = collection.find();        
 		     while(cursor.hasNext()){
@@ -156,9 +156,8 @@ public class ServerDetailsHelper {
 		        		 obj.get("hostname").toString(), 
 		        		 obj.get("type").toString(),
 		        		 "");
-		        Cache cache = cacheManager.getCache("serverDetailCache");
 		 		cache.put(serverDetail.getId(), serverDetail);
-		 		logger.info(serverDetail.getId()+serverDetail.getName());
+		 		//logger.info(serverDetail.getId()+serverDetail.getName());
 		     }
 		 
 	}
@@ -166,7 +165,7 @@ public class ServerDetailsHelper {
 	 public void pullAllServerDetailsToCacheFromDB() throws Exception {
 	        final long start = System.currentTimeMillis();
 	        logger.info("Putting Record in cache");
-	        getDetailsFromDBWithPagination();
+	        getDetailsFromDB();
 	        logger.info("Elapsed time: {}", (System.currentTimeMillis() - start));
 	  }
 	

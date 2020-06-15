@@ -44,8 +44,8 @@ public class KafkaConsumer {
 		serverDetailsHelper.cacheObject(serverDetailfromCache);
 		// update db
 		serverDetailsHelper.updateDbObject(serverDetailfromCache);
-		logger.info(String.format("$$ -> Consumed Message -> %s", serverDetailfromCache));
-		template.convertAndSend("/topic/greetings", serverDetailfromCache);
+		//logger.info(String.format("$$ -> Consumed Message -> %s", serverDetailfromCache));
+		//template.convertAndSend("/topic/greetings", serverDetailfromCache);
 	}
 
 }

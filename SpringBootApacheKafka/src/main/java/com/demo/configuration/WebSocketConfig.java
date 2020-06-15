@@ -31,12 +31,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 @Override
 public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
- 	System.out.println("hi");
+ 	//System.out.println("hi");
 }
 
 @Override
 public void configureClientInboundChannel(ChannelRegistration registration) {
-	System.out.println("hi");
+	//System.out.println("hi");
 	
 }
 
