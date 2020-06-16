@@ -1,10 +1,6 @@
 package com.demo.controller;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +12,7 @@ import com.demo.model.ServerDetail;
 import com.demo.service.KafkaProducer;
 /**
  * Controller class, For various rest operation.
- * @author vinayak
+ * @author Vinayak Manjare.
  *
  */
 @RestController

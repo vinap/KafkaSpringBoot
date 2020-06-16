@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * Model class for the server details.
  * 
- * @author vinayak
+ * @author Vinayak Manjare.
  *
  */
 @Document

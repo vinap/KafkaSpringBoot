@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuration class for the EHcache
- * @author vinayak
+ * @author vinayak Manjare.
  *
  */
 @Configuration

@@ -20,8 +20,7 @@ public class KafkaConsumer {
 	@Autowired
 	com.demo.controller.ServerDetailsHelper serverDetailsHelper;
 	
-	@Autowired
-	SimpMessagingTemplate template;
+
 
 	/**
 	 * Kafka consume method.
