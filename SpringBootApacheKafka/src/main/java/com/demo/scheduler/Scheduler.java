@@ -30,7 +30,7 @@ public class Scheduler {
 	/**Scheduled to execute at every 5 min.
 	 * 
 	 */
-	@Scheduled(fixedDelay = 300000, initialDelay = 300000)
+	@Scheduled(fixedDelay = 60000, initialDelay = 60000)
 	public void fixedRateSch() {
 		final long start = System.currentTimeMillis();
 
@@ -51,7 +51,7 @@ public class Scheduler {
 				} catch (NumberFormatException e) {
 					lastUpdateTimestamp = 0;
 				}
-				if (lastUpdateTimestamp == 0 || start - lastUpdateTimestamp >= 300000) {
+				if (lastUpdateTimestamp == 0 || start - lastUpdateTimestamp >= 60000) {
 					logger.info("ServerName:" + serverDetails.getName());
 					// template.convertAndSend("/topic/greetings", "servers not
 					// responded:"+serverDetails.toString());

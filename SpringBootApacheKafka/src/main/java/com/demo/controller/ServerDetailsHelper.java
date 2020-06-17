@@ -111,6 +111,7 @@ public class ServerDetailsHelper {
 	 */
 	public CompletableFuture<String> loadFakeData(int noOfMessages) {
 		ServerDetail serverDetail = new ServerDetail();
+		final long timestamp = System.currentTimeMillis();
 		String msg="Execution completed !";
 		for(int i=1; i<noOfMessages;i++) {
 			
@@ -121,6 +122,8 @@ public class ServerDetailsHelper {
 				serverDetail.setName(faker.company().name());
 				serverDetail.setHostname(faker.university().name());
 				serverDetail.setType(faker.company().industry());
+				serverDetail.setLastUpdateTimestamp(String.valueOf(timestamp));
+				serverDetail.setStatus("inactive");;
 				ServerDetailsRepository.insert(serverDetail);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
@@ -160,7 +163,7 @@ public class ServerDetailsHelper {
 		     }
 		 
 	}
-	 @Async
+	 //@Async
 	 public void pullAllServerDetailsToCacheFromDB() throws Exception {
 	        final long start = System.currentTimeMillis();
 	        logger.info("Putting Record in cache");
